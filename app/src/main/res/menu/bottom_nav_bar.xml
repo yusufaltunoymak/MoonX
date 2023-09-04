@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/bottomHomeFragment"
+        android:title="Home"
+        android:icon="@drawable/btn_home">
+    </item>
+
+    <item android:id="@+id/bottomMeditationFragment"
+        android:title="Meditation"
+        android:icon="@drawable/btn_meditation">
+    </item>
+
+    <item android:id="@+id/bottomSettingsFragment"
+        android:title="Settings"
+        android:icon="@drawable/btn_settings">
+
+    </item>
+
+
+</menu>
