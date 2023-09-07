@@ -14,6 +14,7 @@ import com.example.moonx.R
 import com.example.moonx.databinding.FragmentMeditationPlayerBinding
 import com.example.moonx.model.MusicItem
 import com.example.moonx.ui.adapter.MeditationAdapter
+import com.example.moonx.ui.adapter.MeditationAdapter2
 import com.example.moonx.viewmodel.MeditationViewModel
 
 
@@ -22,6 +23,7 @@ class MeditationPlayerFragment() : Fragment() {
     private val meditationViewModel: MeditationViewModel by viewModels()
     private lateinit var binding: FragmentMeditationPlayerBinding
     private lateinit var mediaPlayer : MediaPlayer
+
 
 
 
@@ -52,7 +54,9 @@ class MeditationPlayerFragment() : Fragment() {
 
         }
 
+
         binding.btnNextPlaylist.setOnClickListener {
+
 
         }
 
@@ -160,5 +164,7 @@ class MeditationPlayerFragment() : Fragment() {
             e.printStackTrace()
         }
     }
+
+
 
 }

@@ -30,7 +30,7 @@ class MeditationHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        // music item listesini viewmodelda yapmam gerekiyor.
         adapter1 = MeditationAdapter(listOf(
             MusicItem(
                 R.drawable.img_meditation,
