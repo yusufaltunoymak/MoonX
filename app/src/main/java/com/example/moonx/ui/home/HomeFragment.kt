@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
             }
             cardLunarCategoryFood.setOnClickListener {
                 generateHoroscope("food")
-                lunarCategoryIv.setImageResource(R.drawable.img_food)
+                lunarCategoryIv.setImageResource(R.drawable.food_2)
             }
             cardLunarCategoryRelations.setOnClickListener {
                 generateHoroscope("relations")
@@ -95,18 +95,16 @@ class HomeFragment : Fragment() {
     private fun observeData() {
         val city = getSharedPrefCity()
 
-        println(city)
         if (city.isNotEmpty()) {
-            // bugünün tarihi
             val defaultCalendar = Calendar.getInstance()
             val defaultFormattedDate = SimpleDateFormat("yyyy-M-d", Locale.getDefault()).format(defaultCalendar.time)
-            homeViewModel.getData(city, defaultFormattedDate, arrayListOf(), 0, "days")
+            homeViewModel.getData(city, defaultFormattedDate, arrayListOf())
 
             homeViewModel.selectedDate.observe(viewLifecycleOwner) { selectedCalendar ->
                 val dateFormat = SimpleDateFormat("yyyy-M-d", Locale.getDefault())
                 val apiFormattedDate = dateFormat.format(selectedCalendar.time)
 
-                homeViewModel.getData(city, apiFormattedDate, arrayListOf(), 0, "days")
+                homeViewModel.getData(city, apiFormattedDate, arrayListOf())
 
                 val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(selectedCalendar.time)
                 binding.openCalendarButton.text = formattedDate
@@ -131,7 +129,7 @@ class HomeFragment : Fragment() {
                     val formattedDate = dateFormat.format(selectedCalendar.time)
                     binding.openCalendarButton.text = formattedDate
                     val apiFormattedDate = SimpleDateFormat("yyyy-M-d", Locale.getDefault()).format(selectedCalendar.time)
-                    homeViewModel.getData(city, apiFormattedDate, arrayListOf(), 0, "days")
+                    homeViewModel.getData(city, apiFormattedDate, arrayListOf())
                 }
             }
         }

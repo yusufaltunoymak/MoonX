@@ -41,10 +41,37 @@
         android:id="@+id/meditationFragment"
         android:name="com.example.moonx.ui.meditation.MeditationFragment"
         android:label="fragment_meditation"
-        tools:layout="@layout/fragment_meditation" />
+        tools:layout="@layout/fragment_meditation" >
+        <action
+            android:id="@+id/action_meditationFragment_to_meditationPlayerFragment"
+            app:destination="@id/meditationPlayerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.moonx.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/meditationPlayerFragment"
+        android:name="com.example.moonx.ui.meditation.MeditationPlayerFragment"
+        android:label="fragment_meditation_player"
+        tools:layout="@layout/fragment_meditation_player" >
+        <argument
+            android:name="media"
+            app:argType="com.example.moonx.model.MusicItem" />
+        <action
+            android:id="@+id/action_meditationPlayerFragment_to_meditationHomeFragment"
+            app:destination="@id/meditationHomeFragment" />
+        <action
+            android:id="@+id/action_meditationPlayerFragment_to_meditationFragment"
+            app:destination="@id/meditationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/meditationHomeFragment"
+        android:name="MeditationHomeFragment"
+        android:label="MeditationHomeFragment" >
+        <action
+            android:id="@+id/action_meditationHomeFragment_to_meditationPlayerFragment"
+            app:destination="@id/meditationPlayerFragment" />
+    </fragment>
 </navigation>

@@ -17,7 +17,6 @@ import com.example.moonx.databinding.FragmentBirthBinding
 import com.example.moonx.databinding.FragmentPlaceBinding
 import com.example.moonx.databinding.FragmentWelcomeBinding
 import com.example.moonx.util.Constants
-import com.example.moonx.viewmodel.onboardingviewmodel.BirthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,19 +47,13 @@ class PlaceFragment : Fragment() {
 
 
 
-
-
-
-
-
         binding.nextButton3.setOnClickListener {
             val dataBirthPlace = binding.birthDateEditText.text
 
             val birthPlace = dataBirthPlace.toString()
             editor.putString("birthPlace", birthPlace)
             editor.apply()
-            val action = PlaceFragmentDirections.actionPlaceFragmentToHomeFragment2()
-            findNavController().navigate(action)
+
 
         }
 

@@ -8,18 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import com.example.moonx.R
 import com.example.moonx.databinding.FragmentBirthBinding
-import com.example.moonx.databinding.FragmentWelcomeBinding
-import com.example.moonx.room.Birth
-import com.example.moonx.viewmodel.onboardingviewmodel.BirthViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+
 
 class BirthFragment : Fragment() {
     private lateinit var binding: FragmentBirthBinding
@@ -45,7 +37,6 @@ class BirthFragment : Fragment() {
         val sharedPrefs = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
 
-        // val birthDate = binding.birthDateEditText.text.toString()
 
 
 
@@ -62,8 +53,9 @@ class BirthFragment : Fragment() {
             val birthDate = dataBirthDate
             editor.putString("birthDate", dataBirthDate.toString())
             editor.apply()
-            val action = BirthFragmentDirections.actionBirthFragmentToPlaceFragment()
-            findNavController().navigate(action)
+
+                val action = BirthFragmentDirections.actionBirthFragmentToPlaceFragment()
+                findNavController().navigate(action)
 
         }
     }
@@ -72,7 +64,7 @@ class BirthFragment : Fragment() {
         val datePicker = DatePickerDialog(requireContext())
         datePicker.setOnDateSetListener { _, year, month, dayOfMonth ->
             val selectedDate = "${dayOfMonth}.${month + 1}.${year}"
-            binding.birthDateEditText.setText(selectedDate)
+            binding.birthDateEditText.text = selectedDate
         }
         datePicker.show()
     }
@@ -82,7 +74,7 @@ class BirthFragment : Fragment() {
             requireContext(),
             { _, hourOfDay, minute ->
                 val selectedTime = "${hourOfDay}:${minute}"
-                binding.birthTimeEditText.setText(selectedTime)
+                binding.birthTimeEditText.text = selectedTime
             },
             0,
             0,

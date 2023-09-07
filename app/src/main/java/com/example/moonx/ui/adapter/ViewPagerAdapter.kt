@@ -13,6 +13,8 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapte
         return 3
     }
 
+
+
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> MeditationHomeFragment()
@@ -21,4 +23,7 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapte
             else -> throw IllegalArgumentException("Invalid position")
         }
     }
+
+
+
 }

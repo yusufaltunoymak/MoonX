@@ -5,8 +5,15 @@
     android:id="@+id/backgroundImagePlayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_background1"
     tools:context=".ui.meditation.MeditationPlayerFragment">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@drawable/img_background1">
+    </ImageView>
 
 
     <ImageView
@@ -31,15 +38,42 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnPlayPlaylist" />
 
+    <SeekBar
+        android:id="@+id/horizontalProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="24dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/seekbar_progress"
+        android:thumb="@drawable/seekbar_thumb"
+        app:layout_constraintBottom_toTopOf="@+id/btnPlayPlaylist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
         android:id="@+id/btnPlayPlaylist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="40dp"
+        android:visibility="visible"
         android:src="@drawable/btn_play_playlist"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnBackPlaylist" />
+
+
+    <ImageView
+        android:id="@+id/btnStopPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/stop_button"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/btnPlayPlaylist"
+        app:layout_constraintEnd_toEndOf="@+id/btnPlayPlaylist"
+        app:layout_constraintTop_toTopOf="@+id/btnPlayPlaylist" />
 
     <ImageView
         android:id="@+id/btnNextPlaylist"
@@ -70,4 +104,39 @@
         android:src="@drawable/btn_dropdown_arrow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/startTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="00.00"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/horizontalProgressBar"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalProgressBar" />
+
+    <TextView
+        android:id="@+id/endTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="00.30"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/horizontalProgressBar"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalProgressBar" />
+
+    <TextView
+        android:id="@+id/songName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:text="SADADSAD"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalProgressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

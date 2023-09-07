@@ -15,9 +15,9 @@ class HomeRepository @Inject constructor(
     private val gptService: GptAPI
 ) {
 
-    suspend fun getData(city: String, date: String, elements: List<Day>, unitGroup: Any, include: String): Response<WeatherResponse> {
+    suspend fun getData(city: String, date: String, elements: List<Day>): Response<WeatherResponse> {
         val response = weatherService.getWeatherData(
-            city, date, unitGroup = "metric", include = "days", elements, Constants.API_KEY
+            city, date, Constants.METRIC_UNIT, Constants.METRIC_UNIT, elements, Constants.API_KEY
         )
         return response
     }

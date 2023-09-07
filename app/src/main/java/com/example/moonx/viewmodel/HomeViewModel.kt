@@ -97,9 +97,9 @@ class HomeViewModel  @Inject constructor(private val weatherRepository: HomeRepo
     }
 
 
-    fun getData(city:String, date:String,elements : List<Day>,unitGroup : Any,include : String){
+    fun getData(city:String, date:String,elements : List<Day>){
         viewModelScope.launch {
-            val data=weatherRepository.getData(city,date,elements,unitGroup,include)
+            val data=weatherRepository.getData(city,date,elements)
             if(data.isSuccessful){
                 println("viemodell-------------"+data.body()?.days)
                 observeData.postValue(data.body())

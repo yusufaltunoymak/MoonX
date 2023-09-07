@@ -533,11 +533,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="12dp"
                 android:fontFamily="@font/inter"
                 android:text="@string/lunar_response_category_tv"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@+id/lunarResponseBorder"
                 app:layout_constraintEnd_toEndOf="@+id/lunarResponseBorder"
                 app:layout_constraintStart_toStartOf="@+id/lunarResponseBorder"
                 app:layout_constraintTop_toBottomOf="@+id/lunarCategoryIv" />

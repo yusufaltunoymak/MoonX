@@ -39,24 +39,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/sed_ut_pers"
-        android:layout_width="329dp"
-        android:layout_height="64dp"
-        android:layout_alignParentTop="true"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="@font/inter"
         android:gravity="center_horizontal|top"
-        android:lineSpacingExtra="-3sp"
-        android:text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusam.Sed ut perspt perspiciatis unde omnis iste natus error si."
+        android:text="@string/welcome"
         android:textColor="@color/onboarding1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/placeHeaderTv" />
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/nextButton"

@@ -86,7 +86,7 @@
        app:layout_constraintTop_toTopOf="@id/imageView"
         android:layout_marginTop="380dp"/>
 
-    <EditText
+    <TextView
         android:id="@+id/birthDateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enterBirthDateTv" />
 
-    <EditText
+    <TextView
         android:id="@+id/birthTimeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

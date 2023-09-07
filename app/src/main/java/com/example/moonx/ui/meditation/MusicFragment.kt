@@ -5,11 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moonx.R
+import com.example.moonx.databinding.FragmentMusicBinding
+import com.example.moonx.databinding.FragmentYogaBinding
+import com.example.moonx.model.MusicItem
+import com.example.moonx.ui.adapter.MeditationAdapter
 
 
 class MusicFragment : Fragment() {
 
+    private lateinit var binding: FragmentMusicBinding
+    private lateinit var adapter1: MeditationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +28,51 @@ class MusicFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_music, container, false)
+        binding = FragmentMusicBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        adapter1 = MeditationAdapter(
+            listOf(
+                MusicItem(
+                    R.drawable.img_music1,
+                    "Sanatçı1",
+                    "Şarkı1",
+                    "3:45",
+                    "https://uberduck-outputs-permalink.s3-us-west-2.amazonaws.com/22bf853e-7162-49a0-8eb6-8dd5684f9622/mix.wav"
+                ),
+                MusicItem(
+                    R.drawable.img_music2,
+                    "Sanatçı2",
+                    "Şarkı2",
+                    "3:45",
+                    "https://uberduck-outputs-permalink.s3-us-west-2.amazonaws.com/22bf853e-7162-49a0-8eb6-8dd5684f9622/mix.wav"
+                ),
+                MusicItem(
+                    R.drawable.img_music3,
+                    "Sanatçı4",
+                    "Şarkı4",
+                    "3:45",
+                    "https://uberduck-outputs-permalink.s3-us-west-2.amazonaws.com/22bf853e-7162-49a0-8eb6-8dd5684f9622/mix.wav"
+                ),
+                MusicItem(
+                    R.drawable.img_music4,
+                    "Sanatçı4",
+                    "Şarkı4",
+                    "3:45",
+                    "https://uberduck-outputs-permalink.s3-us-west-2.amazonaws.com/22bf853e-7162-49a0-8eb6-8dd5684f9622/mix.wav"
+                ),
+
+                )
+        )
+
+
+        binding.recyclerView.layoutManager = GridLayoutManager(context, 2)
+        binding.recyclerView.adapter = adapter1
     }
 
 
