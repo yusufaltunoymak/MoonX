@@ -521,10 +521,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/img_business2"
                 app:layout_constraintStart_toStartOf="@+id/lunarResponseBorder"
-                app:layout_constraintTop_toBottomOf="@+id/cardLunarCategoryFood" />
+                app:layout_constraintTop_toTopOf="@+id/lunarResponseBorder" />
 
             <TextView
                 android:id="@+id/lunarResponseCategoryTv"

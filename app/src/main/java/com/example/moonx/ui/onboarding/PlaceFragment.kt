@@ -53,7 +53,8 @@ class PlaceFragment : Fragment() {
             val birthPlace = dataBirthPlace.toString()
             editor.putString("birthPlace", birthPlace)
             editor.apply()
-
+            val action = PlaceFragmentDirections.actionPlaceFragmentToHomeFragment2()
+            findNavController().navigate(action)
 
         }
 
