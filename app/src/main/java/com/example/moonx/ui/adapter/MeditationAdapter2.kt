@@ -34,18 +34,22 @@ class MeditationAdapter2 @Inject constructor( private val meditationViewModel: M
         holder.binding.meditationSongName2.text = currentItem.songTitle
         holder.binding.meditationSongTime.text = currentItem.duration
 
+
+
+
         var mediaPlayer: MediaPlayer? = null
 
 
 
         holder.itemView.setOnClickListener {
-
-            val action =
-                MeditationFragmentDirections.actionMeditationFragmentToMeditationPlayerFragment(
-                    currentItem
-                )
-            holder.itemView.findNavController().navigate(action)
+            val nextItemPosition = position + 1
+            if (nextItemPosition < musicList.size) {
+                val nextItem = musicList[nextItemPosition]
+                val action = MeditationFragmentDirections.actionMeditationFragmentToMeditationPlayerFragment(currentItem, nextItem)
+                holder.itemView.findNavController().navigate(action)
+            }
         }
+
 
         holder.binding.btnPlay.setOnClickListener {
             holder.binding.btnPlay.visibility = View.INVISIBLE

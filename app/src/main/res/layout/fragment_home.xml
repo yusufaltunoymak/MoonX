@@ -423,7 +423,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/lunarBack"
+                app:cardBackgroundColor="@color/lunarBackFood"
                 app:cardCornerRadius="8dp"
                 app:layout_constraintStart_toEndOf="@+id/cardLunarCategory"
                 app:layout_constraintTop_toBottomOf="@+id/lunarTipsTv">
@@ -466,7 +466,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/lunarBack"
+                app:cardBackgroundColor="@color/lunarBackRelations"
                 app:cardCornerRadius="8dp"
                 app:layout_constraintStart_toEndOf="@id/cardLunarCategoryFood"
                 app:layout_constraintTop_toBottomOf="@+id/lunarTipsTv">

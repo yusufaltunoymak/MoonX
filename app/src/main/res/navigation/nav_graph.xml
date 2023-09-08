@@ -59,6 +59,11 @@
         <argument
             android:name="media"
             app:argType="com.example.moonx.model.MusicItem" />
+
+        <argument
+            android:name="media_next"
+            app:argType="com.example.moonx.model.MusicItem" />
+
         <action
             android:id="@+id/action_meditationPlayerFragment_to_meditationHomeFragment"
             app:destination="@id/meditationHomeFragment" />

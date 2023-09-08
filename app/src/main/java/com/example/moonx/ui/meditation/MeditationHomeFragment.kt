@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moonx.R
+import com.example.moonx.databinding.FragmentMeditationBinding
 import com.example.moonx.databinding.FragmentMeditationHomeBinding
 import com.example.moonx.model.MusicItem
 import com.example.moonx.ui.adapter.MeditationAdapter
@@ -14,7 +15,8 @@ import com.example.moonx.viewmodel.MeditationViewModel
 
 class MeditationHomeFragment : Fragment() {
 
-    private lateinit var binding: FragmentMeditationHomeBinding
+    private var _binding: FragmentMeditationHomeBinding? = null
+    private val binding get() = _binding!!
     private lateinit var adapter1: MeditationAdapter
     private lateinit var adapter2: MeditationAdapter2
     private val meditationViewModel: MeditationViewModel by viewModels()
@@ -24,13 +26,12 @@ class MeditationHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMeditationHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentMeditationHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // music item listesini viewmodelda yapmam gerekiyor.
         adapter1 = MeditationAdapter(listOf(
             MusicItem(
                 R.drawable.img_meditation,
@@ -72,8 +73,13 @@ class MeditationHomeFragment : Fragment() {
         binding.recyclerView2.adapter = adapter2
 
 
-
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 
 }

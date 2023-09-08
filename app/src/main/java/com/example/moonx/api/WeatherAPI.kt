@@ -13,7 +13,6 @@ interface WeatherAPI {
     suspend fun getWeatherData(
         @Path("city") city: String,
         @Path("date") date: String,
-       // @Query("locations") locations: String,
         @Query("unitGroup") unitGroup: Any,
         @Query("include") include: String,
         @Query("elements") elements: List<Day>,

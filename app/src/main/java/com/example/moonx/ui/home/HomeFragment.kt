@@ -18,6 +18,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.example.moonx.R
 import com.example.moonx.databinding.FragmentHomeBinding
+import com.example.moonx.databinding.FragmentMusicBinding
 import com.example.moonx.model.Day
 import com.example.moonx.repo.HomeRepository
 import com.example.moonx.viewmodel.HomeViewModel
@@ -31,23 +32,20 @@ import kotlin.math.roundToLong
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var progressBar: ProgressBar
 
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-        progressBar = binding.progressBar
 
+        _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        progressBar = binding.progressBar
 
         observeData()
         zodiacObserveData()
@@ -84,7 +82,6 @@ class HomeFragment : Fragment() {
 
 
 
-
         return binding.root
     }
 
@@ -115,11 +112,10 @@ class HomeFragment : Fragment() {
                     cityTv.text = "${weatherResponse.resolvedAddress}"
                     moonRiseTv.text = "${weatherResponse.days?.first()?.moonrise}"
                     moonSetTv.text = "${weatherResponse.days?.first()?.moonset}"
-                    sunRiseTv.text = "${weatherResponse.days?.first()?.sunrise}"
-                    sunSetTv.text = "${weatherResponse.days?.first()?.sunset}"
+                    sunRiseTv.text = formatTime(weatherResponse.days?.first()?.sunrise)
+                    sunSetTv.text = formatTime(weatherResponse.days?.first()?.sunset)
                     weatherTv.text = "${weatherResponse.days?.first()?.temp} °C"
-                    dateTv.text = "${weatherResponse.days?.first()?.datetime}"
-                    println(weatherResponse.days)
+                    dateTv.text = formatDate(weatherResponse.days?.first()?.datetime)
                 }
             }
 
@@ -145,15 +141,12 @@ class HomeFragment : Fragment() {
     private fun getSharedPrefCity(): String {
         val sharedPrefs = requireContext().getSharedPreferences("MyPrefsCity", Context.MODE_PRIVATE)
         val city = sharedPrefs.getString("birthPlace", "") ?: ""
-        Log.e("city", city)
         return city
     }
 
     private fun getSharedPrefDate(): String {
         val sharedPrefs = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val birthDate = sharedPrefs.getString("birthDate", "") ?: ""
-        Log.e("birth", birthDate)
-
         return birthDate
     }
 
@@ -162,13 +155,46 @@ class HomeFragment : Fragment() {
 
         homeViewModel.horoscope.observe(viewLifecycleOwner) { horoscopeText ->
             when (category) {
-                "normal" ->binding.todayTv.text = horoscopeText
-                "business" -> binding.lunarResponseCategoryTv.text = horoscopeText
-                "food" -> binding.lunarResponseCategoryTv.text = horoscopeText
-                "relations" -> binding.lunarResponseCategoryTv.text = horoscopeText
+                "normal" ->binding.todayTv.text = horoscopeText.trim()
+                "business" -> binding.lunarResponseCategoryTv.text = horoscopeText.trim()
+                "food" -> binding.lunarResponseCategoryTv.text = horoscopeText.trim()
+                "relations" -> binding.lunarResponseCategoryTv.text = horoscopeText.trim()
 
             }
         }
 
     }
+
+    private fun formatTime(apiTime: String?): String {
+        apiTime?.let {
+            val parts = apiTime.split(":")
+            if (parts.size >= 2) {
+                val hour = parts[0]
+                val minute = parts[1]
+                return "$hour.$minute"
+            }
+        }
+        return "No Data"
+    }
+
+     private fun formatDate(apiDate: String?): String {
+        apiDate?.let {
+            val apiDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val displayDateFormat = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
+
+            try {
+                val date = apiDateFormat.parse(apiDate)
+                return displayDateFormat.format(date)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return "No Data"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

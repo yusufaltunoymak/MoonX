@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moonx.R
+import com.example.moonx.databinding.FragmentMeditationHomeBinding
 import com.example.moonx.databinding.FragmentMusicBinding
 import com.example.moonx.databinding.FragmentYogaBinding
 import com.example.moonx.model.MusicItem
@@ -15,7 +16,8 @@ import com.example.moonx.ui.adapter.MeditationAdapter
 
 class MusicFragment : Fragment() {
 
-    private lateinit var binding: FragmentMusicBinding
+    private var _binding: FragmentMusicBinding? = null
+    private val binding get() = _binding!!
     private lateinit var adapter1: MeditationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,8 +29,7 @@ class MusicFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentMusicBinding.inflate(inflater, container, false)
+        _binding = FragmentMusicBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -74,6 +75,12 @@ class MusicFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.recyclerView.adapter = adapter1
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 
 }

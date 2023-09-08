@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.moonx.MainActivity
 import com.example.moonx.R
 import com.example.moonx.databinding.FragmentMeditationPlayerBinding
+import com.example.moonx.databinding.FragmentMusicBinding
 import com.example.moonx.model.MusicItem
 import com.example.moonx.ui.adapter.MeditationAdapter
 import com.example.moonx.ui.adapter.MeditationAdapter2
@@ -21,14 +22,14 @@ import com.example.moonx.viewmodel.MeditationViewModel
 class MeditationPlayerFragment() : Fragment() {
 
     private val meditationViewModel: MeditationViewModel by viewModels()
-    private lateinit var binding: FragmentMeditationPlayerBinding
+    private var _binding: FragmentMeditationPlayerBinding? = null
+    private val binding get() = _binding!!
     private lateinit var mediaPlayer : MediaPlayer
 
-
-
+    private var isPlaying = false
+    private var playbackPosition=0
 
     private val args : MeditationPlayerFragmentArgs by navArgs()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class MeditationPlayerFragment() : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMeditationPlayerBinding.inflate(inflater, container, false)
+        _binding = FragmentMeditationPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -47,45 +48,10 @@ class MeditationPlayerFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        binding.arrowIv.setOnClickListener {
-            val action = MeditationPlayerFragmentDirections.actionMeditationPlayerFragmentToMeditationFragment()
-            findNavController().navigate(action)
-
-        }
-
-
-        binding.btnNextPlaylist.setOnClickListener {
-
-
-        }
-
-
-        binding.songName.text=args.media.songTitle
-        binding.backgroundImage.setImageResource(args.media.albumCover)
-
-        binding.btnPlayPlaylist.setOnClickListener {
-            meditationViewModel.isMusicPlaying.value=true
-            binding.btnPlayPlaylist.visibility=View.INVISIBLE
-            binding.btnStopPlay.visibility=View.VISIBLE
-        }
-        binding.btnStopPlay.setOnClickListener {
-            meditationViewModel.isMusicPlaying.value=false
-            binding.btnPlayPlaylist.visibility=View.VISIBLE
-            binding.btnStopPlay.visibility=View.INVISIBLE
-        }
-
-        binding.btnRefresh.setOnClickListener {
-            stopMedia()
-            startMedia()
-            binding.horizontalProgressBar.progress=0
-            binding.startTime.text="00.00"
-        }
-
         meditationViewModel.getIsMusicPlaying().observe(viewLifecycleOwner) { isPlaying ->
             if (isPlaying) {
                 if (bool){
-                    startMedia()
+                    startMedia(args.media)
                     bool=false
                 }else{
                     resumeMedia()
@@ -95,11 +61,87 @@ class MeditationPlayerFragment() : Fragment() {
                 pauseMedia()
             }
         }
+
+        binding.apply {
+
+            songName.text=args.media.songTitle
+            backgroundImage.setImageResource(args.media.albumCover)
+
+
+            arrowIv.setOnClickListener {
+                val action = MeditationPlayerFragmentDirections.actionMeditationPlayerFragmentToMeditationFragment()
+                findNavController().navigate(action)
+            }
+
+            btnNextPlaylist.setOnClickListener {
+                startMedia(args.mediaNext)
+            }
+
+            btnPlayPlaylist.setOnClickListener {
+                meditationViewModel.isMusicPlaying.value=true
+                binding.btnPlayPlaylist.visibility=View.INVISIBLE
+                binding.btnStopPlay.visibility=View.VISIBLE
+            }
+
+            btnStopPlay.setOnClickListener {
+                meditationViewModel.isMusicPlaying.value=false
+                btnPlayPlaylist.visibility=View.VISIBLE
+                btnStopPlay.visibility=View.INVISIBLE
+            }
+
+            btnRefresh.setOnClickListener {
+                stopMedia()
+                startMedia(args.media)
+                horizontalProgressBar.progress=0
+                startTime.text="00.00"
+            }
+
+
+        }
+
+
     }
 
-    private var isPlaying = false
-    private var playbackPosition=0
-    private fun startMedia() {
+    private fun startMedia(mediaItem: MusicItem) {
+        stopMedia()
+        if (!isPlaying) {
+            mediaPlayer = MediaPlayer()
+            mediaPlayer.apply {
+                try {
+                    setDataSource(mediaItem.musicUrl)
+                    binding.songName.text = mediaItem.songTitle
+                    prepareAsync()
+                    setOnPreparedListener {
+                        it.seekTo(playbackPosition)
+                        it.start()
+                        this@MeditationPlayerFragment.isPlaying = true
+                        playbackPosition = 0
+                        val duration = it.duration
+                        binding.endTime.text = meditationViewModel.formatDuration(duration)
+                        binding.horizontalProgressBar.max = duration
+                        meditationViewModel.startUpdatingSeekBar(mediaPlayer, binding.horizontalProgressBar, binding)
+                    }
+                    setOnCompletionListener {
+                        this@MeditationPlayerFragment.isPlaying = false
+                        stopMedia()
+                        playbackPosition = 0
+                        binding.btnPlayPlaylist.visibility = View.VISIBLE
+                        binding.btnStopPlay.visibility = View.INVISIBLE
+                        binding.horizontalProgressBar.progress = 0
+                        binding.startTime.text = "00.00"
+                        bool = true
+                        binding.horizontalProgressBar.progress = 0
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+
+
+    /* private fun startMedia() {
         stopMedia()
         if (!isPlaying) {
             mediaPlayer = MediaPlayer()
@@ -136,6 +178,44 @@ class MeditationPlayerFragment() : Fragment() {
         }
     }
 
+    private fun startMediaNext() {
+        stopMedia()
+        if (!isPlaying) {
+            mediaPlayer = MediaPlayer()
+            mediaPlayer.apply {
+                try {
+                    setDataSource(args.mediaNext.musicUrl)
+                    binding.songName.text=args.mediaNext.songTitle
+                    prepareAsync()
+                    setOnPreparedListener {
+                        it.seekTo(playbackPosition)
+                        it.start()
+                        this@MeditationPlayerFragment.isPlaying = true
+                        playbackPosition = 0
+                        val duration = it.duration
+                        binding.endTime.text = meditationViewModel.formatDuration(duration)
+                        binding.horizontalProgressBar.max = duration
+                        meditationViewModel.startUpdatingSeekBar(mediaPlayer, binding.horizontalProgressBar, binding)
+                    }
+                    setOnCompletionListener {
+                        this@MeditationPlayerFragment.isPlaying = false
+                        stopMedia()
+                        playbackPosition = 0
+                        binding.btnPlayPlaylist.visibility = View.VISIBLE
+                        binding.btnStopPlay.visibility = View.INVISIBLE
+                        binding.horizontalProgressBar.progress = 0
+                        binding.startTime.text="00.00"
+                        bool=true
+                        binding.horizontalProgressBar.progress = 0
+                    }
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    } */
+
     private fun pauseMedia() {
         if (isPlaying) {
             mediaPlayer.pause()
@@ -165,6 +245,10 @@ class MeditationPlayerFragment() : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 
 }

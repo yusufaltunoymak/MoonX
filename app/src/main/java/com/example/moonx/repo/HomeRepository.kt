@@ -17,7 +17,7 @@ class HomeRepository @Inject constructor(
 
     suspend fun getData(city: String, date: String, elements: List<Day>): Response<WeatherResponse> {
         val response = weatherService.getWeatherData(
-            city, date, Constants.METRIC_UNIT, Constants.METRIC_UNIT, elements, Constants.API_KEY
+            city, date, Constants.METRIC_UNIT, Constants.INCLUDE_DAYS, elements, Constants.API_KEY
         )
         return response
     }

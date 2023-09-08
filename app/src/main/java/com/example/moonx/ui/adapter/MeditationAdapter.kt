@@ -11,9 +11,9 @@ import com.example.moonx.ui.meditation.MeditationFragmentDirections
 
 class MeditationAdapter(private val musicList: List<MusicItem>) : RecyclerView.Adapter<MeditationAdapter.ViewHolder>() {
 
-class ViewHolder(val binding : GirdMeditationRowBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(val binding : GirdMeditationRowBinding): RecyclerView.ViewHolder(binding.root) {
 
-}
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,6 +21,7 @@ class ViewHolder(val binding : GirdMeditationRowBinding): RecyclerView.ViewHolde
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         val currentItem = musicList[position]
         holder.binding.meditationIv.setImageResource(currentItem.albumCover)
         holder.binding.meditationName.text = currentItem.artist
@@ -31,12 +32,19 @@ class ViewHolder(val binding : GirdMeditationRowBinding): RecyclerView.ViewHolde
 
 
         holder.itemView.setOnClickListener {
-            val action = MeditationFragmentDirections.actionMeditationFragmentToMeditationPlayerFragment(currentItem)
-            holder.itemView.findNavController().navigate(action)
-
+            var nextItemPosition = position + 1
+            if (nextItemPosition < musicList.size) {
+                val nextItem = musicList[nextItemPosition]
+                val action = MeditationFragmentDirections.actionMeditationFragmentToMeditationPlayerFragment(currentItem, nextItem)
+                holder.itemView.findNavController().navigate(action)
+            }
+            else {
+                musicList[0]
+            }
         }
-
     }
+
+
 
     override fun getItemCount(): Int {
         return musicList.size
