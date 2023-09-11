@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.moonx.R
 import com.example.moonx.databinding.FragmentMeditationBinding
 import com.example.moonx.ui.adapter.ViewPagerAdapter
@@ -44,8 +45,15 @@ class MeditationFragment : Fragment() {
         tabHeaderList.add("Music")
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.setText(tabHeaderList[position])
+            tab.text = tabHeaderList[position]
         }.attach()
+
+        for(i in 0..3) {
+            val textView = LayoutInflater.from(requireContext()).inflate(R.layout.tab_title,null) as TextView
+            tabLayout.getTabAt(i)?.customView = textView
+        }
+
+
     }
 
 

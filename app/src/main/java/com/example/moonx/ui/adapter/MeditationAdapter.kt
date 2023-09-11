@@ -38,6 +38,7 @@ class MeditationAdapter(private val musicList: List<MusicItem>) : RecyclerView.A
                 val action = MeditationFragmentDirections.actionMeditationFragmentToMeditationPlayerFragment(currentItem, nextItem)
                 holder.itemView.findNavController().navigate(action)
             }
+
             else {
                 musicList[0]
             }
@@ -49,5 +50,7 @@ class MeditationAdapter(private val musicList: List<MusicItem>) : RecyclerView.A
     override fun getItemCount(): Int {
         return musicList.size
     }
+
+
 
 }
