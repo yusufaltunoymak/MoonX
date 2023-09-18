@@ -1,13 +1,14 @@
 package com.example.moonx.model
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
-@Parcelize
+
 data class MusicItem(
     val albumCover: Int,
+    val playerCover : Int,
     val artist: String,
     val songTitle: String,
     val duration: String,
-    val musicUrl: String
-    ) : Parcelable
+    val musicUrl: String,
+    val genre : String
+    ) : Serializable

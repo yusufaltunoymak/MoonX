@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_placeFragment_to_homeFragment2"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_placeFragment_to_inAppFragment"
+            app:destination="@id/inAppFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -56,13 +59,6 @@
         android:name="com.example.moonx.ui.meditation.MeditationPlayerFragment"
         android:label="fragment_meditation_player"
         tools:layout="@layout/fragment_meditation_player" >
-        <argument
-            android:name="media"
-            app:argType="com.example.moonx.model.MusicItem" />
-
-        <argument
-            android:name="media_next"
-            app:argType="com.example.moonx.model.MusicItem" />
 
         <action
             android:id="@+id/action_meditationPlayerFragment_to_meditationHomeFragment"
@@ -78,5 +74,14 @@
         <action
             android:id="@+id/action_meditationHomeFragment_to_meditationPlayerFragment"
             app:destination="@id/meditationPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inAppFragment"
+        android:name="com.example.moonx.ui.inapp.InAppFragment"
+        android:label="fragment_in_app"
+        tools:layout="@layout/fragment_in_app" >
+        <action
+            android:id="@+id/action_inAppFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

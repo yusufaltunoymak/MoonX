@@ -46,6 +46,7 @@ class MeditationFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabHeaderList[position]
+
         }.attach()
 
         for(i in 0..3) {

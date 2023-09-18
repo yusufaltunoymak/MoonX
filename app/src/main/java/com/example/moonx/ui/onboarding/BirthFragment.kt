@@ -60,6 +60,7 @@ class BirthFragment : Fragment() {
         }
     }
 
+
     private fun showDatePicker() {
         val datePicker = DatePickerDialog(requireContext())
         datePicker.setOnDateSetListener { _, year, month, dayOfMonth ->

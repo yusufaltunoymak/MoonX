@@ -47,13 +47,14 @@ class PlaceFragment : Fragment() {
 
 
 
+
         binding.nextButton3.setOnClickListener {
             val dataBirthPlace = binding.birthDateEditText.text
 
             val birthPlace = dataBirthPlace.toString()
             editor.putString("birthPlace", birthPlace)
             editor.apply()
-            val action = PlaceFragmentDirections.actionPlaceFragmentToHomeFragment2()
+            val action = PlaceFragmentDirections.actionPlaceFragmentToInAppFragment()
             findNavController().navigate(action)
 
         }
