@@ -27,7 +27,7 @@ class MeditationAdapter(private val onItemClicked: (MusicItem) -> Unit) : ListAd
 
     }
 
-    class ViewHolder(private val binding: GirdMeditationRowBinding,   private val viewModel: MeditationViewModel) :
+    class ViewHolder(private val binding: GirdMeditationRowBinding, private val viewModel: MeditationViewModel) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(musicItem: MusicItem) {
             binding.apply {

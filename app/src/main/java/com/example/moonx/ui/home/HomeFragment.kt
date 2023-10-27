@@ -1,42 +1,30 @@
 package com.example.moonx.ui.home
 
-import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.ui.setupWithNavController
 import com.example.moonx.R
 import com.example.moonx.databinding.FragmentHomeBinding
-import com.example.moonx.databinding.FragmentMusicBinding
-import com.example.moonx.model.Day
-import com.example.moonx.repo.HomeRepository
+import com.example.moonx.util.Constants
 import com.example.moonx.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
     private lateinit var progressBar: ProgressBar
-
 
 
     override fun onCreateView(
@@ -58,6 +46,7 @@ class HomeFragment : Fragment() {
             horoscopeBackGround.setOnClickListener {
                 generateHoroscope("normal")
             }
+
             cardLunarCategory.setOnClickListener {
                 generateHoroscope("business")
                 lunarCategoryIv.setImageResource(R.drawable.img_business2)
@@ -72,16 +61,13 @@ class HomeFragment : Fragment() {
             }
         }
 
-        homeViewModel.loadingStatus.observe(viewLifecycleOwner) { isLoading ->
+        homeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
                 progressBar.visibility = View.VISIBLE
             } else {
                 progressBar.visibility = View.GONE
             }
         }
-
-
-
         return binding.root
     }
 
@@ -94,38 +80,69 @@ class HomeFragment : Fragment() {
 
         if (city.isNotEmpty()) {
             val defaultCalendar = Calendar.getInstance()
-            val defaultFormattedDate = SimpleDateFormat("yyyy-M-d", Locale.getDefault()).format(defaultCalendar.time)
-            homeViewModel.getData(city, defaultFormattedDate, arrayListOf())
+            val defaultFormattedDate =
+                SimpleDateFormat("yyyy-M-d", Locale.getDefault()).format(defaultCalendar.time)
+
+            homeViewModel.getData(city, defaultFormattedDate, Constants.dayProperties.toString(),true)
 
             homeViewModel.selectedDate.observe(viewLifecycleOwner) { selectedCalendar ->
                 val dateFormat = SimpleDateFormat("yyyy-M-d", Locale.getDefault())
                 val apiFormattedDate = dateFormat.format(selectedCalendar.time)
 
-                homeViewModel.getData(city, apiFormattedDate, arrayListOf())
-
-                val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(selectedCalendar.time)
+                homeViewModel.getData(city, apiFormattedDate, Constants.dayProperties.joinToString(","),true)
+                val formattedDate = SimpleDateFormat(
+                    "dd MMM yyyy",
+                    Locale.getDefault()
+                ).format(selectedCalendar.time)
                 binding.openCalendarButton.text = formattedDate
             }
 
             homeViewModel.observeData.observe(viewLifecycleOwner) { weatherResponse ->
                 binding.apply {
-                    cityTv.text = "${weatherResponse.resolvedAddress}"
-                    moonRiseTv.text = "${weatherResponse.days?.first()?.moonrise}"
-                    moonSetTv.text = "${weatherResponse.days?.first()?.moonset}"
-                    sunRiseTv.text = formatTime(weatherResponse.days?.first()?.sunrise)
-                    sunSetTv.text = formatTime(weatherResponse.days?.first()?.sunset)
-                    weatherTv.text = "${weatherResponse.days?.first()?.temp} °C"
-                    dateTv.text = formatDate(weatherResponse.days?.first()?.datetime)
+                    weatherResponse?.days?.let {
+                        cityTv.text = "${weatherResponse.resolvedAddress}"
+                        moonRiseTv.text = formatTime(weatherResponse.days?.first()?.moonRise)
+                        moonSetTv.text = formatTime(weatherResponse.days?.first()?.moonSet)
+                        sunRiseTv.text = formatTime(weatherResponse.days?.first()?.sunrise)
+                        sunSetTv.text = formatTime(weatherResponse.days?.first()?.sunset)
+                        weatherTv.text = "${weatherResponse.days?.first()?.temp} °C"
+                        dateTv.text = formatDate(weatherResponse.days?.first()?.datetime)
+                    }
+
+                    homeViewModel.onError.observe(viewLifecycleOwner) {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
-            binding.openCalendarButton.setOnClickListener {
-                homeViewModel.showDatePickerDialog(requireContext()) { selectedCalendar ->
-                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-                    val formattedDate = dateFormat.format(selectedCalendar.time)
-                    binding.openCalendarButton.text = formattedDate
-                    val apiFormattedDate = SimpleDateFormat("yyyy-M-d", Locale.getDefault()).format(selectedCalendar.time)
-                    homeViewModel.getData(city, apiFormattedDate, arrayListOf())
+        }
+
+        binding.openCalendarButton.setOnClickListener {
+            homeViewModel.showDatePickerDialog(requireContext()) { selectedCalendar ->
+                val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val formattedDate = dateFormat.format(selectedCalendar.time)
+                binding.openCalendarButton.text = formattedDate
+                val apiFormattedDate =
+                    SimpleDateFormat("yyyy-M-d", Locale.getDefault()).format(selectedCalendar.time)
+                homeViewModel.getData(city, apiFormattedDate, Constants.dayProperties.joinToString(","),true)
+            }
+        }
+    }
+
+    private fun generateHoroscope(category: String) {
+        homeViewModel.generateHoroscope(category)
+
+        homeViewModel.completionResponse.observe(viewLifecycleOwner) { response ->
+            val horoscopeText = response?.trim() ?: homeViewModel.onError.value
+            when (category) {
+                "normal" -> binding.todayTv.text = horoscopeText
+                "business", "food", "relations" -> binding.lunarResponseCategoryTv.text = horoscopeText
+            }
+
+            homeViewModel.onError.observe(viewLifecycleOwner) {
+                it.let {
+                    binding.todayTv.text = it
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -149,22 +166,6 @@ class HomeFragment : Fragment() {
         val birthDate = sharedPrefs.getString("birthDate", "") ?: ""
         return birthDate
     }
-
-    private fun generateHoroscope(category : String) {
-        homeViewModel.generateHoroscope(category)
-
-        homeViewModel.horoscope.observe(viewLifecycleOwner) { horoscopeText ->
-            when (category) {
-                "normal" ->binding.todayTv.text = horoscopeText.trim()
-                "business" -> binding.lunarResponseCategoryTv.text = horoscopeText.trim()
-                "food" -> binding.lunarResponseCategoryTv.text = horoscopeText.trim()
-                "relations" -> binding.lunarResponseCategoryTv.text = horoscopeText.trim()
-
-            }
-        }
-
-    }
-
     private fun formatTime(apiTime: String?): String {
         apiTime?.let {
             val parts = apiTime.split(":")
@@ -177,7 +178,7 @@ class HomeFragment : Fragment() {
         return "No Data"
     }
 
-     private fun formatDate(apiDate: String?): String {
+    private fun formatDate(apiDate: String?): String {
         apiDate?.let {
             val apiDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val displayDateFormat = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
@@ -191,10 +192,9 @@ class HomeFragment : Fragment() {
         }
         return "No Data"
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }
+

@@ -1,27 +1,16 @@
 package com.example.moonx.util
 
-data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+sealed class Resource<T>(
+    val data: T? = null,
+    val message: String? = null,
+    val networkError: Boolean = false
 
-    companion object {
+) {
 
-        fun <T> success(data: T?): Resource<T> {
-            return Resource(Status.SUCCESS, data, null)
-        }
+    class Success<T>(data: T) : Resource<T>(data)
+    class Error<T>(networkError: Boolean, message: String?) :
+        Resource<T>(data = null, message = message, networkError = networkError)
 
-        fun <T> error(msg: String, data: T?): Resource<T> {
-            return Resource(Status.ERROR, data, msg)
-        }
 
-        fun <T> loading(data: T?): Resource<T> {
-            return Resource(Status.LOADING, data, null)
-        }
 
-    }
-
-}
-
-enum class Status {
-    SUCCESS,
-    ERROR,
-    LOADING
 }

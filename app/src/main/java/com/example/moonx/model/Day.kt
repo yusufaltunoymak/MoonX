@@ -2,8 +2,6 @@ package com.example.moonx.model
 
 
 import com.google.gson.annotations.SerializedName
-import java.sql.Date
-import java.sql.Time
 
 data class Day(
     @SerializedName("datetime")
@@ -15,9 +13,9 @@ data class Day(
     @SerializedName("sunset")
     val sunset: String?,
     @SerializedName("moonrise")
-    val moonrise: String?,
+    val moonRise: String?,
     @SerializedName("moonset")
-    val moonset: String?,
+    val moonSet: String?,
     @SerializedName("temp")
     val temp : Double?
 )
